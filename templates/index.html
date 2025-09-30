@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Document & Media Processing Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .category {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            color: #667eea;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .subcategories {
+            margin-bottom: 20px;
+        }
+
+        .subcategory-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 3px solid #667eea;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .tool-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .tool-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        .processing-time {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .tool-description {
+            color: #666;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .tool-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .tool-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .upload-area {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-modal {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .upload-zone {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px 20px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            background: #f8f9ff;
+            border-color: #5a67d8;
+        }
+
+        .upload-zone.dragover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header animate__animated animate__fadeInDown">
+            <h1><i class="fas fa-magic"></i> All-in-One Processing Platform</h1>
+            <p>105 Powerful Tools for Documents, Images, Websites & More</p>
+        </div>
+
+        <div class="search-container animate__animated animate__fadeInUp">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search tools by name or description...">
+        </div>
+
+        <div class="categories" id="categoriesContainer">
+            <!-- Categories will be loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="upload-area" id="uploadArea">
+        <div class="upload-modal">
+            <button class="close-btn" onclick="closeUploadModal()">&times;</button>
+            <h3 id="modalTitle">Upload Files</h3>
+            <div class="upload-zone" id="uploadZone">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #667eea; margin-bottom: 15px;"></i>
+                <p>Drag & drop files here or click to browse</p>
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="status-message" id="statusMessage">Processing...</div>
+            </div>
+            <button class="tool-button" id="processBtn" onclick="processFiles()" style="display: none;">Process Files</button>
+        </div>
+    </div>
+
+    <script>
+        let currentToolId = null;
+        let selectedFiles = [];
+        let jobId = null;
+
+        // Load tools on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTools();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchBox').addEventListener('input', function(e) {
+                filterTools(e.target.value);
+            });
+
+            // File upload
+            document.getElementById('uploadZone').addEventListener('click', () => {
+                document.getElementById('fileInput').click();
+            });
+
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+            // Drag and drop
+            const uploadZone = document.getElementById('uploadZone');
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('dragover');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                handleFileSelect({ target: { files: e.dataTransfer.files } });
+            });
+        }
+
+        async function loadTools() {
+            try {
+                const response = await fetch('/api/tools');
+                const tools = await response.json();
+                displayTools(tools);
+            } catch (error) {
+                console.error('Error loading tools:', error);
+            }
+        }
+
+        function displayTools(tools) {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+
+            Object.entries(tools).forEach(([categoryName, subcategories]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category fade-in';
+                
+                const icon = getCategoryIcon(categoryName);
+                
+                categoryDiv.innerHTML = `
+                    <div class="category-header">
+                        <i class="fas ${icon} category-icon"></i>
+                        <div class="category-title">${categoryName}</div>
+                    </div>
+                `;
+
+                Object.entries(subcategories).forEach(([subcategoryName, tools]) => {
+                    const subcategoryDiv = document.createElement('div');
+                    subcategoryDiv.className = 'subcategories';
+                    
+                    subcategoryDiv.innerHTML = `
+                        <div class="subcategory-title">${subcategoryName}</div>
+                        <div class="tools-grid">
+                            ${tools.map(tool => `
+                                <div class="tool-card" data-tool-id="${tool.id}">
+                                    <div class="tool-header">
+                                        <div class="tool-name">${tool.name}</div>
+                                        <div class="processing-time">${tool.time}</div>
+                                    </div>
+                                    <div class="tool-description">${tool.description}</div>
+                                    <button class="tool-button" onclick="openUploadModal('${tool.id}', '${tool.name}')">
+                                        <i class="fas fa-upload"></i> Use Tool
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                    categoryDiv.appendChild(subcategoryDiv);
+                });
+
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function getCategoryIcon(categoryName) {
+            const icons = {
+                'PDF & Document Tools': 'fa-file-pdf',
+                'Excel & CSV Tools': 'fa-file-excel',
+                'Image & Media Tools': 'fa-image',
+                'Website & URL Tools': 'fa-globe',
+                'SEO & Marketing Tools': 'fa-chart-line',
+                'AI & Automation Tools': 'fa-robot',
+                'Developer & Code Tools': 'fa-code',
+                'Productivity & Miscellaneous Tools': 'fa-tools'
+            };
+            return icons[categoryName] || 'fa-cog';
+        }
+
+        function filterTools(searchTerm) {
+            const toolCards = document.querySelectorAll('.tool-card');
+            const categories = document.querySelectorAll('.category');
+            
+            toolCards.forEach(card => {
+                const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
+                const toolDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+                const search = searchTerm.toLowerCase();
+                
+                if (toolName.includes(search) || toolDescription.includes(search)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hide/show categories based on visible tools
+            categories.forEach(category => {
+                const visibleTools = category.querySelectorAll('.tool-card[style*="block"], .tool-card:not([style*="none"])');
+                if (visibleTools.length === 0 && searchTerm) {
+                    category.style.display = 'none';
+                } else {
+                    category.style.display = 'block';
+                }
+            });
+        }
+
+        function openUploadModal(toolId, toolName) {
+            currentToolId = toolId;
+            document.getElementById('modalTitle').textContent = `Upload Files - ${toolName}`;
+            document.getElementById('uploadArea').style.display = 'flex';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('processBtn').style.display = 'none';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadArea').style.display = 'none';
+            selectedFiles = [];
+            currentToolId = null;
+        }
+
+        function handleFileSelect(event) {
+            selectedFiles = Array.from(event.target.files);
+            if (selectedFiles.length > 0) {
+                document.getElementById('processBtn').style.display = 'block';
+                document.getElementById('statusMessage').textContent = `${selectedFiles.length} file(s) selected`;
+            }
+        }
+
+        async function processFiles() {
+            if (!currentToolId || selectedFiles.length === 0) return;
+
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('processBtn').style.display = 'none';
+
+            try {
+                const response = await fetch(`/api/process/${currentToolId}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.job_id) {
+                    jobId = result.job_id;
+                    pollStatus();
+                } else {
+                    throw new Error(result.error || 'Processing failed');
+                }
+            } catch (error) {
+                document.getElementById('statusMessage').textContent = `Error: ${error.message}`;
+                document.getElementById('processBtn').style.display = 'block';
+            }
+        }
+
+        async function pollStatus() {
+            if (!jobId) return;
+
+            try {
+                const response = await fetch(`/api/status/${jobId}`);
+                const status = await response.json();
+
+                document.getElementById('progressFill').style.width = `${status.progress}%`;
+                document.getElementById('statusMessage').textContent = `Processing... ${status.progress}%`;
+
+                if (status.status === 'completed') {
+                    document.getElementById('statusMessage').textContent = 'Processing completed! Files ready for download.';
+                    document.getElementById('progressFill').style.background = '#28a745';
+                    
+                    // Show download button or handle completion
+                    setTimeout(() => {
+                        closeUploadModal();
+                    }, 2000);
+                } else if (status.status === 'error') {
+                    document.getElementById('statusMessage').textContent = `Error: ${status.error}`;
+                    document.getElementById('processBtn').style.display = 'block';
+                } else {
+                    // Continue polling
+                    setTimeout(pollStatus, 1000);
+                }
+            } catch (error) {
+                document.getElementById('statusMessage').textContent = `Error checking status: ${error.message}`;
+                document.getElementById('processBtn').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
