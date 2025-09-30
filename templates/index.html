@@ -68,9 +68,11 @@
 
         .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
             margin-bottom: 40px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
 
         .category {
@@ -79,16 +81,25 @@
             padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
         }
 
         .category:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .category.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
         }
 
         .category-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid #f0f0f0;
@@ -104,6 +115,46 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: #333;
+            flex: 1;
+        }
+
+        .category-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .category-summary {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .category-tools-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tool-preview {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        .tool-preview:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            color: #667eea;
         }
 
         .subcategories {
@@ -123,6 +174,56 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 15px;
+        }
+
+        .category-detail-view {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .back-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .category-detail-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-detail-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: #667eea;
         }
 
         .tool-card {
@@ -301,6 +402,45 @@
             100% { transform: scale(1); }
         }
 
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            opacity: 1;
+        }
+
+        .search-container:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        }
+
+        .category.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+            transform: translateY(-2px);
+        }
+
+        .category.selected .category-icon {
+            color: #5a67d8;
+        }
+
+        .category.selected .category-title {
+            color: #5a67d8;
+        }
+
+        .category.selected .category-count {
+            background: #5a67d8;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -312,6 +452,16 @@
             
             .tools-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .category-detail-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .category-detail-title {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -327,8 +477,28 @@
             <input type="text" class="search-box" id="searchBox" placeholder="Search tools by name or description...">
         </div>
 
+        <div class="category-detail-view" id="categoryDetailView">
+            <div class="category-detail-header">
+                <button class="back-button" onclick="showAllCategories()">
+                    <i class="fas fa-arrow-left"></i> Back to All Categories
+                </button>
+                <div class="category-detail-title" id="categoryDetailTitle">
+                    <i class="fas fa-cog category-detail-icon"></i>
+                    <span id="categoryDetailName">Category Name</span>
+                </div>
+            </div>
+            <div id="categoryDetailContent">
+                <!-- Category tools will be loaded here -->
+            </div>
+        </div>
+
         <div class="categories" id="categoriesContainer">
             <!-- Categories will be loaded dynamically -->
+        </div>
+
+        <div id="loadingIndicator" style="text-align: center; padding: 40px; display: none;">
+            <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: 20px; color: white; font-size: 1.1rem;">Loading tools...</p>
         </div>
     </div>
 
@@ -396,11 +566,22 @@
 
         async function loadTools() {
             try {
+                document.getElementById('loadingIndicator').style.display = 'block';
+                document.getElementById('categoriesContainer').style.display = 'none';
+                
                 const response = await fetch('/api/tools');
                 const tools = await response.json();
+                
+                // Simulate loading time for better UX
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
                 displayTools(tools);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('categoriesContainer').style.display = 'grid';
             } catch (error) {
                 console.error('Error loading tools:', error);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('categoriesContainer').innerHTML = '<div style="text-align: center; color: white; padding: 40px;"><h3>Error loading tools. Please refresh the page.</h3></div>';
             }
         }
 
@@ -411,15 +592,68 @@
             Object.entries(tools).forEach(([categoryName, subcategories]) => {
                 const categoryDiv = document.createElement('div');
                 categoryDiv.className = 'category fade-in';
+                categoryDiv.onclick = () => showCategoryDetail(categoryName, subcategories);
                 
                 const icon = getCategoryIcon(categoryName);
+                const totalTools = Object.values(subcategories).flat().length;
+                const summary = getCategorySummary(categoryName);
+                const toolNames = Object.values(subcategories).flat().slice(0, 6).map(tool => tool.name);
                 
                 categoryDiv.innerHTML = `
                     <div class="category-header">
-                        <i class="fas ${icon} category-icon"></i>
-                        <div class="category-title">${categoryName}</div>
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas ${icon} category-icon"></i>
+                            <div class="category-title">${categoryName}</div>
+                        </div>
+                        <div class="category-count">${totalTools} tools</div>
+                    </div>
+                    <div class="category-summary">${summary}</div>
+                    <div class="category-tools-preview">
+                        ${toolNames.map(name => `<span class="tool-preview">${name}</span>`).join('')}
+                        ${totalTools > 6 ? `<span class="tool-preview">+${totalTools - 6} more</span>` : ''}
                     </div>
                 `;
+
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function getCategorySummary(categoryName) {
+            const summaries = {
+                'PDF & Document Tools': 'Convert, edit, merge, split, and analyze PDF documents with advanced OCR and form processing capabilities.',
+                'Excel & CSV Tools': 'Process spreadsheet data with conversion, cleaning, validation, and advanced analytics features.',
+                'Image & Media Tools': 'Resize, compress, enhance, and create visual content with AI-powered image processing tools.',
+                'Website & URL Tools': 'Analyze websites, extract content, check performance, and generate reports for SEO optimization.',
+                'SEO & Marketing Tools': 'Research keywords, analyze competitors, generate content, and optimize for search engines.',
+                'AI & Automation Tools': 'Leverage AI for content generation, analysis, translation, and automated marketing tasks.',
+                'Developer & Code Tools': 'Convert files, optimize code, test APIs, and generate structured data for development workflows.',
+                'Productivity & Miscellaneous Tools': 'Generate documents, create templates, manage files, and boost productivity with utility tools.'
+            };
+            return summaries[categoryName] || 'Powerful tools for your workflow.';
+        }
+
+        function showCategoryDetail(categoryName, subcategories) {
+            // Add smooth transition
+            document.getElementById('categoriesContainer').style.opacity = '0';
+            document.getElementById('searchBox').style.opacity = '0';
+            
+            setTimeout(() => {
+                // Hide main categories view
+                document.getElementById('categoriesContainer').style.display = 'none';
+                document.getElementById('searchBox').style.display = 'none';
+                
+                // Show category detail view
+                document.getElementById('categoryDetailView').style.display = 'block';
+                document.getElementById('categoryDetailView').style.opacity = '0';
+                
+                // Update category detail header
+                const icon = getCategoryIcon(categoryName);
+                document.getElementById('categoryDetailName').textContent = categoryName;
+                document.querySelector('.category-detail-icon').className = `fas ${icon} category-detail-icon`;
+                
+                // Load category tools
+                const content = document.getElementById('categoryDetailContent');
+                content.innerHTML = '';
 
                 Object.entries(subcategories).forEach(([subcategoryName, tools]) => {
                     const subcategoryDiv = document.createElement('div');
@@ -429,7 +663,7 @@
                         <div class="subcategory-title">${subcategoryName}</div>
                         <div class="tools-grid">
                             ${tools.map(tool => `
-                                <div class="tool-card" data-tool-id="${tool.id}">
+                                <div class="tool-card fade-in" data-tool-id="${tool.id}">
                                     <div class="tool-header">
                                         <div class="tool-name">${tool.name}</div>
                                         <div class="processing-time">${tool.time}</div>
@@ -443,11 +677,34 @@
                         </div>
                     `;
                     
-                    categoryDiv.appendChild(subcategoryDiv);
+                    content.appendChild(subcategoryDiv);
                 });
 
-                container.appendChild(categoryDiv);
-            });
+                // Fade in the category detail view
+                setTimeout(() => {
+                    document.getElementById('categoryDetailView').style.opacity = '1';
+                }, 100);
+            }, 300);
+        }
+
+        function showAllCategories() {
+            // Add smooth transition
+            document.getElementById('categoryDetailView').style.opacity = '0';
+            
+            setTimeout(() => {
+                // Show main categories view
+                document.getElementById('categoriesContainer').style.display = 'grid';
+                document.getElementById('searchBox').style.display = 'block';
+                
+                // Hide category detail view
+                document.getElementById('categoryDetailView').style.display = 'none';
+                
+                // Fade in the main view
+                setTimeout(() => {
+                    document.getElementById('categoriesContainer').style.opacity = '1';
+                    document.getElementById('searchBox').style.opacity = '1';
+                }, 100);
+            }, 300);
         }
 
         function getCategoryIcon(categoryName) {
@@ -465,6 +722,24 @@
         }
 
         function filterTools(searchTerm) {
+            // If we're in category detail view, search within that category
+            if (document.getElementById('categoryDetailView').style.display === 'block') {
+                const toolCards = document.querySelectorAll('#categoryDetailContent .tool-card');
+                toolCards.forEach(card => {
+                    const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
+                    const toolDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+                    const search = searchTerm.toLowerCase();
+                    
+                    if (toolName.includes(search) || toolDescription.includes(search)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                return;
+            }
+
+            // Search in main categories view
             const toolCards = document.querySelectorAll('.tool-card');
             const categories = document.querySelectorAll('.category');
             
