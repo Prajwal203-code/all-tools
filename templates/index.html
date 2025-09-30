@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <div class="mb-8">
+    <h1 class="text-2xl md:text-3xl font-bold tracking-tight">All Tools</h1>
+    <p class="text-gray-600 mt-2">Browse by category. Each tool shows an estimated processing time.</p>
+  </div>
+
+  <div class="space-y-12">
+    {% for category, tools in grouped_tools.items() %}
+      <section>
+        <h2 class="text-xl md:text-2xl font-semibold mb-4">{{ category }}</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {% for t in tools %}
+            <div class="bg-white rounded-lg border border-gray-200 p-4 flex flex-col justify-between">
+              <div>
+                <h3 class="text-lg font-medium">{{ t.name }}</h3>
+                <p class="text-sm text-gray-600 mt-1">{{ t.subtitle or '' }}</p>
+                {% if t.processing_time %}
+                  <p class="text-xs text-gray-500 mt-2">Est. {{ t.processing_time.min_seconds }}–{{ t.processing_time.max_seconds }}s</p>
+                {% endif %}
+              </div>
+              <div class="mt-4">
+                <a href="/tools/{{ t.slug }}" class="inline-flex items-center justify-center w-full rounded-md bg-gray-900 text-white px-3 py-2 text-sm hover:bg-gray-800">Open</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+{% endblock %}
