@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative overflow-hidden py-20 px-4">
+    <div class="max-w-7xl mx-auto text-center">
+        <div class="mb-8">
+            <h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+                105 Professional Tools
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Complete SaaS platform with PDF, Excel, Image, AI, SEO, and productivity tools. 
+                Process files instantly with real-time progress tracking.
+            </p>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+            <div class="bg-white/70 backdrop-blur-sm rounded-full px-4 py-2 border border-blue-200">
+                <span class="text-sm font-medium text-blue-700">✨ Real-time Processing</span>
+            </div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-full px-4 py-2 border border-green-200">
+                <span class="text-sm font-medium text-green-700">🚀 Batch Operations</span>
+            </div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-200">
+                <span class="text-sm font-medium text-purple-700">📱 Mobile Friendly</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tool Categories -->
+<section class="py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Choose Your Tool Category</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- PDF & Document Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-file-pdf text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">PDF & Document Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">Convert, edit, merge, split, and optimize PDF files with professional features.</p>
+                <div class="text-xs text-blue-600 font-medium mb-4">20 Tools • 3-25s processing</div>
+                <a href="/tools/pdf" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Excel & CSV Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-table text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Excel & CSV Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">Process spreadsheets, clean data, generate charts and convert formats.</p>
+                <div class="text-xs text-green-600 font-medium mb-4">15 Tools • 2-10s processing</div>
+                <a href="/tools/excel" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Image & Media Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-purple-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-image text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Image & Media Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">Resize, compress, edit images, create memes and generate thumbnails.</p>
+                <div class="text-xs text-purple-600 font-medium mb-4">15 Tools • 3-25s processing</div>
+                <a href="/tools/image" class="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Website & URL Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-globe text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Website & URL Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">Analyze websites, check links, generate sitemaps and capture screenshots.</p>
+                <div class="text-xs text-blue-600 font-medium mb-4">15 Tools • 2-15s processing</div>
+                <a href="/tools/url" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- SEO & Marketing Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-orange-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-chart-line text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">SEO & Marketing Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">Keyword research, backlink analysis, competitor research and SEO audits.</p>
+                <div class="text-xs text-orange-600 font-medium mb-4">10 Tools • 5-20s processing</div>
+                <a href="/tools/seo" class="inline-flex items-center text-orange-600 hover:text-orange-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- AI & Automation Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-pink-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-robot text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">AI & Automation Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">AI-powered content generation, translation, sentiment analysis and more.</p>
+                <div class="text-xs text-pink-600 font-medium mb-4">10 Tools • 10-30s processing</div>
+                <a href="/tools/ai" class="inline-flex items-center text-pink-600 hover:text-pink-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Developer & Code Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-indigo-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-code text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Developer & Code Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">HTML converters, API testers, minifiers and development utilities.</p>
+                <div class="text-xs text-indigo-600 font-medium mb-4">10 Tools • 2-15s processing</div>
+                <a href="/tools/dev" class="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Productivity & Miscellaneous Tools -->
+            <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-teal-200">
+                <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <i class="fas fa-tools text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Productivity Tools</h3>
+                <p class="text-gray-600 text-sm mb-4">QR codes, certificates, calendars, passwords and utility generators.</p>
+                <div class="text-xs text-teal-600 font-medium mb-4">15 Tools • 1-12s processing</div>
+                <a href="/tools/productivity" class="inline-flex items-center text-teal-600 hover:text-teal-700 font-medium text-sm">
+                    Explore Tools <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 px-4 bg-gradient-to-r from-blue-50 to-purple-50">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Why Choose ToolHub?</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lightning-bolt text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Lightning Fast</h3>
+                <p class="text-gray-600">Real-time processing with progress tracking. Most tools complete in under 10 seconds.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shield-alt text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Secure & Private</h3>
+                <p class="text-gray-600">Files are processed securely and automatically deleted after download.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-mobile-alt text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Mobile Ready</h3>
+                <p class="text-gray-600">Fully responsive design works perfectly on all devices and screen sizes.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-3xl font-bold text-blue-600 mb-2">105</div>
+                <div class="text-gray-600 text-sm">Total Tools</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-green-600 mb-2">8</div>
+                <div class="text-gray-600 text-sm">Categories</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-purple-600 mb-2">&lt;10s</div>
+                <div class="text-gray-600 text-sm">Avg Processing</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-orange-600 mb-2">100MB</div>
+                <div class="text-gray-600 text-sm">Max File Size</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
