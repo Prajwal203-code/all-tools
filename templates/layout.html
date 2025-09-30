@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>All-in-One Tools Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <header class="sticky top-0 z-10 bg-white/70 backdrop-blur border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="text-xl font-semibold tracking-tight">Tools Suite</a>
+        <nav class="text-sm text-gray-600">
+          <a href="/" class="hover:text-gray-900">Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500">
+        Built with Flask. Realtime progress via SSE.
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </body>
+</html>
