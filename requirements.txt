@@ -1,0 +1,33 @@
+# Free AI API Alternatives - Python Dependencies
+# ===============================================
+
+# Core dependencies
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Optional: Enhanced functionality
+google-generativeai>=0.3.0  # For Google AI Studio/Gemini
+cohere>=4.21.0               # For Cohere API
+openai>=1.0.0               # For OpenRouter (uses OpenAI format)
+
+# Optional: Advanced frameworks
+langchain>=0.0.350          # For building LLM applications
+langchain-community>=0.0.10  # Community integrations
+transformers>=4.35.0        # For local Hugging Face models
+torch>=2.0.0                # For local model inference
+sentence-transformers>=2.2.2 # For embeddings
+
+# Optional: Local AI solutions
+gpt4all>=2.0.0              # For local GPT4All models
+ollama-python>=0.1.0        # For Ollama Python client
+
+# Development dependencies
+python-dotenv>=1.0.0        # Environment variable management
+pydantic>=2.5.0             # Data validation
+fastapi>=0.104.0            # For building APIs
+uvicorn>=0.24.0             # ASGI server
+
+# Optional: Web scraping and data processing
+beautifulsoup4>=4.12.0      # Web scraping
+pandas>=2.1.0               # Data processing
+numpy>=1.24.0               # Numerical computing
