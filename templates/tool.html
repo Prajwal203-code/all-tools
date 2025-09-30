@@ -1,0 +1,421 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center space-x-2 bg-white/70 backdrop-blur-sm rounded-full px-4 py-2 border border-gray-200 mb-4">
+                <i class="fas fa-arrow-left text-gray-500"></i>
+                <a href="javascript:history.back()" class="text-sm text-gray-600 hover:text-blue-600">Back to Tools</a>
+            </div>
+            <h1 id="toolTitle" class="text-4xl font-bold text-gray-900 mb-4">Loading Tool...</h1>
+            <p id="toolDescription" class="text-lg text-gray-600 max-w-2xl mx-auto"></p>
+        </div>
+
+        <!-- Tool Interface -->
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            <!-- Tool Header -->
+            <div id="toolHeader" class="bg-gradient-to-r from-blue-500 to-purple-500 p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div id="toolIcon" class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-tools text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 id="toolName" class="text-xl font-semibold">Tool Name</h2>
+                            <p id="processingTime" class="text-white/80 text-sm">Processing time: ~5s</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-white/80">Status</div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <span class="text-sm font-medium">Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool Content -->
+            <div class="p-8">
+                <!-- File Upload Area -->
+                <div id="uploadArea" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors duration-200 mb-6">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cloud-upload-alt text-2xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Upload your files</h3>
+                    <p class="text-gray-600 mb-4">Drag and drop files here or click to browse</p>
+                    <input type="file" id="fileInput" class="hidden" multiple accept="*/*">
+                    <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                        Choose Files
+                    </button>
+                    <p class="text-xs text-gray-500 mt-2">Maximum file size: 100MB</p>
+                </div>
+
+                <!-- URL Input (for URL-based tools) -->
+                <div id="urlInputArea" class="hidden mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Enter URL(s)</label>
+                    <div class="space-y-3">
+                        <input type="url" id="urlInput" placeholder="https://example.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <textarea id="bulkUrlInput" placeholder="Enter multiple URLs (one per line)" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+                </div>
+
+                <!-- Text Input (for text-based tools) -->
+                <div id="textInputArea" class="hidden mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Enter Text</label>
+                    <textarea id="textInput" placeholder="Enter your text here..." rows="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+
+                <!-- Additional Options -->
+                <div id="optionsArea" class="hidden mb-6">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">Options</h4>
+                    <div id="optionsContainer" class="space-y-3">
+                        <!-- Dynamic options will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Uploaded Files Display -->
+                <div id="uploadedFiles" class="hidden mb-6">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">Uploaded Files</h4>
+                    <div id="filesList" class="space-y-2">
+                        <!-- Uploaded files will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Process Button -->
+                <div class="text-center">
+                    <button id="processBtn" onclick="processFiles()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-play mr-2"></i>Process Files
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool Instructions -->
+        <div class="mt-8 bg-blue-50 rounded-xl p-6 border border-blue-200">
+            <h3 class="text-lg font-semibold text-blue-900 mb-3 flex items-center">
+                <i class="fas fa-info-circle mr-2"></i>How to use this tool
+            </h3>
+            <div id="toolInstructions" class="text-blue-800 space-y-2">
+                <p>1. Upload your files using the upload area above</p>
+                <p>2. Configure any additional options if available</p>
+                <p>3. Click the "Process Files" button to start</p>
+                <p>4. Wait for processing to complete and download your results</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentTool = '';
+let uploadedFiles = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const toolName = urlParams.get('name') || 'Unknown Tool';
+    const toolId = window.location.pathname.split('/').pop();
+    
+    currentTool = toolId;
+    loadToolInterface(toolId, toolName);
+    setupFileUpload();
+});
+
+function loadToolInterface(toolId, toolName) {
+    // Tool configurations
+    const toolConfigs = {
+        // PDF Tools
+        pdf_word_converter: {
+            name: 'PDF → Word Converter',
+            description: 'Convert PDF files into editable Word documents (.docx) with preserved formatting',
+            icon: 'fas fa-file-word',
+            color: 'from-red-500 to-red-600',
+            processingTime: '~10s',
+            inputType: 'file',
+            acceptedFiles: '.pdf',
+            instructions: [
+                'Upload one or more PDF files',
+                'Files will be converted to editable Word format',
+                'Download the converted .docx files',
+                'Original formatting and layout will be preserved'
+            ]
+        },
+        pdf_excel_converter: {
+            name: 'PDF → Excel Converter',
+            description: 'Extract tables from PDF files to structured Excel spreadsheets',
+            icon: 'fas fa-file-excel',
+            color: 'from-green-500 to-green-600',
+            processingTime: '~15s',
+            inputType: 'file',
+            acceptedFiles: '.pdf',
+            instructions: [
+                'Upload PDF files containing tables',
+                'AI will automatically detect and extract tables',
+                'Download structured Excel files with extracted data',
+                'Multiple tables will be placed in separate sheets'
+            ]
+        },
+        word_pdf_converter: {
+            name: 'Word → PDF Converter',
+            description: 'Convert Word documents to PDF format with high quality',
+            icon: 'fas fa-file-pdf',
+            color: 'from-blue-500 to-blue-600',
+            processingTime: '~8s',
+            inputType: 'file',
+            acceptedFiles: '.doc,.docx',
+            instructions: [
+                'Upload Word documents (.doc or .docx)',
+                'Files will be converted to PDF format',
+                'Download high-quality PDF files',
+                'Formatting and layout will be preserved'
+            ]
+        },
+        // Add more tool configs as needed...
+    };
+
+    const config = toolConfigs[toolId] || {
+        name: toolName,
+        description: 'Professional tool for file processing and conversion',
+        icon: 'fas fa-tools',
+        color: 'from-blue-500 to-purple-500',
+        processingTime: '~10s',
+        inputType: 'file',
+        acceptedFiles: '*/*',
+        instructions: [
+            'Upload your files using the upload area',
+            'Configure any available options',
+            'Click process to start the operation',
+            'Download your processed files when complete'
+        ]
+    };
+
+    // Update UI
+    document.getElementById('toolTitle').textContent = config.name;
+    document.getElementById('toolDescription').textContent = config.description;
+    document.getElementById('toolName').textContent = config.name;
+    document.getElementById('processingTime').textContent = `Processing time: ${config.processingTime}`;
+    document.getElementById('toolIcon').innerHTML = `<i class="${config.icon} text-2xl"></i>`;
+    document.getElementById('toolHeader').className = `bg-gradient-to-r ${config.color} p-6 text-white`;
+    
+    // Update file input
+    document.getElementById('fileInput').setAttribute('accept', config.acceptedFiles);
+    
+    // Update instructions
+    const instructionsContainer = document.getElementById('toolInstructions');
+    instructionsContainer.innerHTML = config.instructions.map((instruction, index) => 
+        `<p>${index + 1}. ${instruction}</p>`
+    ).join('');
+
+    // Show appropriate input areas
+    if (config.inputType === 'url') {
+        document.getElementById('uploadArea').style.display = 'none';
+        document.getElementById('urlInputArea').classList.remove('hidden');
+    } else if (config.inputType === 'text') {
+        document.getElementById('uploadArea').style.display = 'none';
+        document.getElementById('textInputArea').classList.remove('hidden');
+    }
+}
+
+function setupFileUpload() {
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('uploadArea');
+    
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('border-blue-400', 'bg-blue-50');
+    });
+    
+    uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('border-blue-400', 'bg-blue-50');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('border-blue-400', 'bg-blue-50');
+        const files = Array.from(e.dataTransfer.files);
+        handleFiles(files);
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        handleFiles(files);
+    });
+}
+
+function handleFiles(files) {
+    uploadedFiles = files;
+    displayUploadedFiles(files);
+    document.getElementById('processBtn').disabled = false;
+}
+
+function displayUploadedFiles(files) {
+    const uploadedFilesDiv = document.getElementById('uploadedFiles');
+    const filesList = document.getElementById('filesList');
+    
+    uploadedFilesDiv.classList.remove('hidden');
+    filesList.innerHTML = '';
+    
+    files.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg border';
+        fileItem.innerHTML = `
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-file text-gray-400"></i>
+                <div>
+                    <div class="font-medium text-gray-900">${file.name}</div>
+                    <div class="text-sm text-gray-500">${formatFileSize(file.size)}</div>
+                </div>
+            </div>
+            <button onclick="removeFile(${index})" class="text-red-500 hover:text-red-700">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        filesList.appendChild(fileItem);
+    });
+}
+
+function removeFile(index) {
+    uploadedFiles.splice(index, 1);
+    if (uploadedFiles.length === 0) {
+        document.getElementById('uploadedFiles').classList.add('hidden');
+        document.getElementById('processBtn').disabled = true;
+    } else {
+        displayUploadedFiles(uploadedFiles);
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+async function processFiles() {
+    if (uploadedFiles.length === 0) {
+        alert('Please upload files first');
+        return;
+    }
+    
+    document.getElementById('processBtn').disabled = true;
+    showProcessingModal();
+    
+    try {
+        // Upload files first
+        const uploadPromises = uploadedFiles.map(file => uploadFile(file));
+        const uploadResults = await Promise.all(uploadPromises);
+        
+        // Start processing
+        const response = await fetch('/api/process', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                tool_name: currentTool,
+                files: uploadResults
+            })
+        });
+        
+        const result = await response.json();
+        if (result.task_id) {
+            pollTaskStatus(result.task_id);
+        }
+    } catch (error) {
+        console.error('Error processing files:', error);
+        hideProcessingModal();
+        alert('Error processing files. Please try again.');
+        document.getElementById('processBtn').disabled = false;
+    }
+}
+
+async function uploadFile(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+    });
+    
+    return await response.json();
+}
+
+function pollTaskStatus(taskId) {
+    const pollInterval = setInterval(async () => {
+        try {
+            const response = await fetch(`/api/status/${taskId}`);
+            const status = await response.json();
+            
+            updateProgressBar(status.progress);
+            updateProcessingStatus(status);
+            
+            if (status.status === 'completed') {
+                clearInterval(pollInterval);
+                showSuccessModal(taskId);
+            } else if (status.status === 'failed') {
+                clearInterval(pollInterval);
+                hideProcessingModal();
+                alert('Processing failed: ' + (status.error || 'Unknown error'));
+                document.getElementById('processBtn').disabled = false;
+            }
+        } catch (error) {
+            clearInterval(pollInterval);
+            hideProcessingModal();
+            alert('Error checking status. Please try again.');
+            document.getElementById('processBtn').disabled = false;
+        }
+    }, 1000);
+}
+
+function showProcessingModal() {
+    document.getElementById('processingModal').classList.remove('hidden');
+    document.getElementById('processingToolName').textContent = document.getElementById('toolName').textContent;
+}
+
+function hideProcessingModal() {
+    document.getElementById('processingModal').classList.add('hidden');
+}
+
+function showSuccessModal(taskId) {
+    hideProcessingModal();
+    document.getElementById('successModal').classList.remove('hidden');
+    document.getElementById('downloadBtn').onclick = () => downloadResult(taskId);
+}
+
+function updateProgressBar(progress) {
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+}
+
+function updateProcessingStatus(status) {
+    const statusMessages = {
+        0: 'Initializing...',
+        25: 'Reading files...',
+        50: 'Processing data...',
+        75: 'Generating output...',
+        100: 'Finalizing...'
+    };
+    
+    const message = statusMessages[Math.floor(status.progress / 25) * 25] || 'Processing...';
+    document.getElementById('processingStatus').textContent = message;
+    
+    const remaining = Math.max(0, status.estimated_time - status.elapsed_time);
+    document.getElementById('timeRemaining').textContent = remaining > 0 ? `${remaining}s remaining` : 'Almost done...';
+}
+
+function downloadResult(taskId) {
+    window.location.href = `/api/download/${taskId}`;
+    closeModal('successModal');
+    document.getElementById('processBtn').disabled = false;
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+</script>
+{% endblock %}

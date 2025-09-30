@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ToolHub - 105 Professional Tools{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tools text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            ToolHub
+                        </span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">105 Professional Tools</span>
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400">&copy; 2025 ToolHub. All rights reserved.</p>
+                <p class="text-sm text-gray-500 mt-2">105 Professional Tools for Modern Productivity</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Processing Modal -->
+    <div id="processingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-cog animate-spin text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Processing Your Request</h3>
+                <p id="processingToolName" class="text-gray-600 mb-4">Tool Name</p>
+                
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                    <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                
+                <div class="flex justify-between text-sm text-gray-600 mb-4">
+                    <span id="progressPercent">0%</span>
+                    <span id="timeRemaining">Estimating...</span>
+                </div>
+                
+                <div id="processingStatus" class="text-sm text-gray-500">
+                    Initializing...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-2xl text-green-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Processing Complete!</h3>
+                <p class="text-gray-600 mb-6">Your file has been processed successfully.</p>
+                
+                <div class="space-y-3">
+                    <button id="downloadBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium">
+                        <i class="fas fa-download mr-2"></i>Download Result
+                    </button>
+                    <button onclick="closeModal('successModal')" class="w-full bg-gray-100 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-200 transition-all duration-200">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
