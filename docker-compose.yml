@@ -1,0 +1,95 @@
+# Docker Compose for Free AI Alternatives
+# ========================================
+# This sets up local AI services as alternatives to ChatGPT API
+
+version: '3.8'
+
+services:
+  # Ollama - Local LLM Server
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./models:/models
+    environment:
+      - OLLAMA_ORIGINS=*
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - ai_network
+
+  # Optional: Ollama Web UI
+  ollama-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: ollama-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=your-secret-key-here
+    volumes:
+      - open_webui_data:/app/backend/data
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - ai_network
+
+  # Your application container (example)
+  free-ai-app:
+    build: .
+    container_name: free-ai-app
+    ports:
+      - "8080:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+      - GOOGLE_AI_API_KEY=${GOOGLE_AI_API_KEY}
+      - COHERE_API_KEY=${COHERE_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    volumes:
+      - .:/app
+      - app_data:/app/data
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - ai_network
+
+  # Optional: Text Generation WebUI (for more models)
+  text-generation-webui:
+    image: atinoda/text-generation-webui:default
+    container_name: text-gen-webui
+    ports:
+      - "7860:7860"
+    volumes:
+      - text_gen_data:/app/models
+      - text_gen_config:/app/config
+    environment:
+      - CLI_ARGS=--listen --api
+    restart: unless-stopped
+    networks:
+      - ai_network
+
+volumes:
+  ollama_data:
+    driver: local
+  open_webui_data:
+    driver: local
+  app_data:
+    driver: local
+  text_gen_data:
+    driver: local
+  text_gen_config:
+    driver: local
+
+networks:
+  ai_network:
+    driver: bridge

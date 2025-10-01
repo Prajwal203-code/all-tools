@@ -1,0 +1,46 @@
+{
+  "name": "free-ai-api-alternatives",
+  "version": "1.0.0",
+  "description": "Free alternatives to ChatGPT API with practical implementations",
+  "main": "quick_start_examples.js",
+  "scripts": {
+    "start": "node quick_start_examples.js",
+    "demo": "node quick_start_examples.js",
+    "server": "node -e \"require('./quick_start_examples.js').createWebServer()\"",
+    "install-local": "./setup_local_ai.sh",
+    "test-ollama": "curl -X POST http://localhost:11434/api/generate -H 'Content-Type: application/json' -d '{\"model\":\"llama2\",\"prompt\":\"Hello\",\"stream\":false}'",
+    "list-ollama": "curl -X GET http://localhost:11434/api/tags"
+  },
+  "keywords": [
+    "ai",
+    "chatgpt",
+    "free",
+    "api",
+    "alternatives",
+    "ollama",
+    "huggingface",
+    "local-ai",
+    "llm"
+  ],
+  "author": "AI Assistant",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "local"
+  },
+  "homepage": "README.md",
+  "directories": {
+    "doc": "./docs"
+  }
+}
