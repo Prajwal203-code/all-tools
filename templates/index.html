@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Document & Media Processing Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .category {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .category.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            color: #667eea;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            flex: 1;
+        }
+
+        .category-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .category-summary {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .category-tools-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tool-preview {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        .tool-preview:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .subcategories {
+            margin-bottom: 20px;
+        }
+
+        .subcategory-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 3px solid #667eea;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .category-detail-view {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .back-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .category-detail-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-detail-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: #667eea;
+        }
+
+        .tool-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .tool-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        .processing-time {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .tool-description {
+            color: #666;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .tool-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .tool-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .upload-area {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-modal {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .upload-zone {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px 20px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            background: #f8f9ff;
+            border-color: #5a67d8;
+        }
+
+        .upload-zone.dragover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            opacity: 1;
+        }
+
+        .search-container:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        }
+
+        .category.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+            transform: translateY(-2px);
+        }
+
+        .category.selected .category-icon {
+            color: #5a67d8;
+        }
+
+        .category.selected .category-title {
+            color: #5a67d8;
+        }
+
+        .category.selected .category-count {
+            background: #5a67d8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-detail-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .category-detail-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header animate__animated animate__fadeInDown">
+            <h1><i class="fas fa-magic"></i> All-in-One Processing Platform</h1>
+            <p>105 Powerful Tools for Documents, Images, Websites & More</p>
+        </div>
+
+        <div class="search-container animate__animated animate__fadeInUp">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search tools by name or description...">
+        </div>
+
+        <div class="category-detail-view" id="categoryDetailView">
+            <div class="category-detail-header">
+                <button class="back-button" onclick="showAllCategories()">
+                    <i class="fas fa-arrow-left"></i> Back to All Categories
+                </button>
+                <div class="category-detail-title" id="categoryDetailTitle">
+                    <i class="fas fa-cog category-detail-icon"></i>
+                    <span id="categoryDetailName">Category Name</span>
+                </div>
+            </div>
+            <div id="categoryDetailContent">
+                <!-- Category tools will be loaded here -->
+            </div>
+        </div>
+
+        <div class="categories" id="categoriesContainer">
+            <!-- Categories will be loaded dynamically -->
+        </div>
+
+        <div id="loadingIndicator" style="text-align: center; padding: 40px; display: none;">
+            <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: 20px; color: white; font-size: 1.1rem;">Loading tools...</p>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="upload-area" id="uploadArea">
+        <div class="upload-modal">
+            <button class="close-btn" onclick="closeUploadModal()">&times;</button>
+            <h3 id="modalTitle">Upload Files</h3>
+            <div class="upload-zone" id="uploadZone">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #667eea; margin-bottom: 15px;"></i>
+                <p>Drag & drop files here or click to browse</p>
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="status-message" id="statusMessage">Processing...</div>
+            </div>
+            <button class="tool-button" id="processBtn" onclick="processFiles()" style="display: none;">Process Files</button>
+        </div>
+    </div>
+
+    <script>
+        let currentToolId = null;
+        let selectedFiles = [];
+        let jobId = null;
+
+        // Load tools on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTools();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchBox').addEventListener('input', function(e) {
+                filterTools(e.target.value);
+            });
+
+            // File upload
+            document.getElementById('uploadZone').addEventListener('click', () => {
+                document.getElementById('fileInput').click();
+            });
+
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+            // Drag and drop
+            const uploadZone = document.getElementById('uploadZone');
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('dragover');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                handleFileSelect({ target: { files: e.dataTransfer.files } });
+            });
+        }
+
+        async function loadTools() {
+            try {
+                document.getElementById('loadingIndicator').style.display = 'block';
+                document.getElementById('categoriesContainer').style.display = 'none';
+                
+                const response = await fetch('/api/tools');
+                const tools = await response.json();
+                
+                // Simulate loading time for better UX
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                displayTools(tools);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('categoriesContainer').style.display = 'grid';
+            } catch (error) {
+                console.error('Error loading tools:', error);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('categoriesContainer').innerHTML = '<div style="text-align: center; color: white; padding: 40px;"><h3>Error loading tools. Please refresh the page.</h3></div>';
+            }
+        }
+
+        function displayTools(tools) {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+
+            Object.entries(tools).forEach(([categoryName, subcategories]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category fade-in';
+                categoryDiv.onclick = () => showCategoryDetail(categoryName, subcategories);
+                
+                const icon = getCategoryIcon(categoryName);
+                const totalTools = Object.values(subcategories).flat().length;
+                const summary = getCategorySummary(categoryName);
+                const toolNames = Object.values(subcategories).flat().slice(0, 6).map(tool => tool.name);
+                
+                categoryDiv.innerHTML = `
+                    <div class="category-header">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas ${icon} category-icon"></i>
+                            <div class="category-title">${categoryName}</div>
+                        </div>
+                        <div class="category-count">${totalTools} tools</div>
+                    </div>
+                    <div class="category-summary">${summary}</div>
+                    <div class="category-tools-preview">
+                        ${toolNames.map(name => `<span class="tool-preview">${name}</span>`).join('')}
+                        ${totalTools > 6 ? `<span class="tool-preview">+${totalTools - 6} more</span>` : ''}
+                    </div>
+                `;
+
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function getCategorySummary(categoryName) {
+            const summaries = {
+                'PDF & Document Tools': 'Convert, edit, merge, split, and analyze PDF documents with advanced OCR and form processing capabilities.',
+                'Excel & CSV Tools': 'Process spreadsheet data with conversion, cleaning, validation, and advanced analytics features.',
+                'Image & Media Tools': 'Resize, compress, enhance, and create visual content with AI-powered image processing tools.',
+                'Website & URL Tools': 'Analyze websites, extract content, check performance, and generate reports for SEO optimization.',
+                'SEO & Marketing Tools': 'Research keywords, analyze competitors, generate content, and optimize for search engines.',
+                'AI & Automation Tools': 'Leverage AI for content generation, analysis, translation, and automated marketing tasks.',
+                'Developer & Code Tools': 'Convert files, optimize code, test APIs, and generate structured data for development workflows.',
+                'Productivity & Miscellaneous Tools': 'Generate documents, create templates, manage files, and boost productivity with utility tools.'
+            };
+            return summaries[categoryName] || 'Powerful tools for your workflow.';
+        }
+
+        function showCategoryDetail(categoryName, subcategories) {
+            // Add smooth transition
+            document.getElementById('categoriesContainer').style.opacity = '0';
+            document.getElementById('searchBox').style.opacity = '0';
+            
+            setTimeout(() => {
+                // Hide main categories view
+                document.getElementById('categoriesContainer').style.display = 'none';
+                document.getElementById('searchBox').style.display = 'none';
+                
+                // Show category detail view
+                document.getElementById('categoryDetailView').style.display = 'block';
+                document.getElementById('categoryDetailView').style.opacity = '0';
+                
+                // Update category detail header
+                const icon = getCategoryIcon(categoryName);
+                document.getElementById('categoryDetailName').textContent = categoryName;
+                document.querySelector('.category-detail-icon').className = `fas ${icon} category-detail-icon`;
+                
+                // Load category tools
+                const content = document.getElementById('categoryDetailContent');
+                content.innerHTML = '';
+
+                Object.entries(subcategories).forEach(([subcategoryName, tools]) => {
+                    const subcategoryDiv = document.createElement('div');
+                    subcategoryDiv.className = 'subcategories';
+                    
+                    subcategoryDiv.innerHTML = `
+                        <div class="subcategory-title">${subcategoryName}</div>
+                        <div class="tools-grid">
+                            ${tools.map(tool => `
+                                <div class="tool-card fade-in" data-tool-id="${tool.id}">
+                                    <div class="tool-header">
+                                        <div class="tool-name">${tool.name}</div>
+                                        <div class="processing-time">${tool.time}</div>
+                                    </div>
+                                    <div class="tool-description">${tool.description}</div>
+                                    <button class="tool-button" onclick="openUploadModal('${tool.id}', '${tool.name}')">
+                                        <i class="fas fa-upload"></i> Use Tool
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                    content.appendChild(subcategoryDiv);
+                });
+
+                // Fade in the category detail view
+                setTimeout(() => {
+                    document.getElementById('categoryDetailView').style.opacity = '1';
+                }, 100);
+            }, 300);
+        }
+
+        function showAllCategories() {
+            // Add smooth transition
+            document.getElementById('categoryDetailView').style.opacity = '0';
+            
+            setTimeout(() => {
+                // Show main categories view
+                document.getElementById('categoriesContainer').style.display = 'grid';
+                document.getElementById('searchBox').style.display = 'block';
+                
+                // Hide category detail view
+                document.getElementById('categoryDetailView').style.display = 'none';
+                
+                // Fade in the main view
+                setTimeout(() => {
+                    document.getElementById('categoriesContainer').style.opacity = '1';
+                    document.getElementById('searchBox').style.opacity = '1';
+                }, 100);
+            }, 300);
+        }
+
+        function getCategoryIcon(categoryName) {
+            const icons = {
+                'PDF & Document Tools': 'fa-file-pdf',
+                'Excel & CSV Tools': 'fa-file-excel',
+                'Image & Media Tools': 'fa-image',
+                'Website & URL Tools': 'fa-globe',
+                'SEO & Marketing Tools': 'fa-chart-line',
+                'AI & Automation Tools': 'fa-robot',
+                'Developer & Code Tools': 'fa-code',
+                'Productivity & Miscellaneous Tools': 'fa-tools'
+            };
+            return icons[categoryName] || 'fa-cog';
+        }
+
+        function filterTools(searchTerm) {
+            // If we're in category detail view, search within that category
+            if (document.getElementById('categoryDetailView').style.display === 'block') {
+                const toolCards = document.querySelectorAll('#categoryDetailContent .tool-card');
+                toolCards.forEach(card => {
+                    const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
+                    const toolDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+                    const search = searchTerm.toLowerCase();
+                    
+                    if (toolName.includes(search) || toolDescription.includes(search)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                return;
+            }
+
+            // Search in main categories view
+            const toolCards = document.querySelectorAll('.tool-card');
+            const categories = document.querySelectorAll('.category');
+            
+            toolCards.forEach(card => {
+                const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
+                const toolDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+                const search = searchTerm.toLowerCase();
+                
+                if (toolName.includes(search) || toolDescription.includes(search)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hide/show categories based on visible tools
+            categories.forEach(category => {
+                const visibleTools = category.querySelectorAll('.tool-card[style*="block"], .tool-card:not([style*="none"])');
+                if (visibleTools.length === 0 && searchTerm) {
+                    category.style.display = 'none';
+                } else {
+                    category.style.display = 'block';
+                }
+            });
+        }
+
+        function openUploadModal(toolId, toolName) {
+            currentToolId = toolId;
+            document.getElementById('modalTitle').textContent = `Upload Files - ${toolName}`;
+            document.getElementById('uploadArea').style.display = 'flex';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('processBtn').style.display = 'none';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadArea').style.display = 'none';
+            selectedFiles = [];
+            currentToolId = null;
+        }
+
+        function handleFileSelect(event) {
+            selectedFiles = Array.from(event.target.files);
+            if (selectedFiles.length > 0) {
+                document.getElementById('processBtn').style.display = 'block';
+                document.getElementById('statusMessage').textContent = `${selectedFiles.length} file(s) selected`;
+            }
+        }
+
+        async function processFiles() {
+            if (!currentToolId || selectedFiles.length === 0) return;
+
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('processBtn').style.display = 'none';
+
+            try {
+                const response = await fetch(`/api/process/${currentToolId}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.job_id) {
+                    jobId = result.job_id;
+                    pollStatus();
+                } else {
+                    throw new Error(result.error || 'Processing failed');
+                }
+            } catch (error) {
+                document.getElementById('statusMessage').textContent = `Error: ${error.message}`;
+                document.getElementById('processBtn').style.display = 'block';
+            }
+        }
+
+        async function pollStatus() {
+            if (!jobId) return;
+
+            try {
+                const response = await fetch(`/api/status/${jobId}`);
+                const status = await response.json();
+
+                document.getElementById('progressFill').style.width = `${status.progress}%`;
+                document.getElementById('statusMessage').textContent = `Processing... ${status.progress}%`;
+
+                if (status.status === 'completed') {
+                    document.getElementById('statusMessage').textContent = 'Processing completed! Files ready for download.';
+                    document.getElementById('progressFill').style.background = '#28a745';
+                    
+                    // Show download button or handle completion
+                    setTimeout(() => {
+                        closeUploadModal();
+                    }, 2000);
+                } else if (status.status === 'error') {
+                    document.getElementById('statusMessage').textContent = `Error: ${status.error}`;
+                    document.getElementById('processBtn').style.display = 'block';
+                } else {
+                    // Continue polling
+                    setTimeout(pollStatus, 1000);
+                }
+            } catch (error) {
+                document.getElementById('statusMessage').textContent = `Error checking status: ${error.message}`;
+                document.getElementById('processBtn').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
