@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center space-x-2 bg-white/70 backdrop-blur-sm rounded-full px-4 py-2 border border-gray-200 mb-4">
+                <i class="fas fa-arrow-left text-gray-500"></i>
+                <a href="/" class="text-sm text-gray-600 hover:text-blue-600">Back to Categories</a>
+            </div>
+            <h1 id="categoryTitle" class="text-4xl font-bold text-gray-900 mb-4"></h1>
+            <p id="categoryDescription" class="text-lg text-gray-600 max-w-3xl mx-auto"></p>
+        </div>
+
+        <!-- Tools Grid -->
+        <div id="toolsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Tools will be populated here -->
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const category = '{{ category }}';
+    loadCategoryTools(category);
+});
+
+function loadCategoryTools(category) {
+    const toolsData = {
+        pdf: {
+            title: 'PDF & Document Tools',
+            description: 'Professional PDF processing tools for converting, editing, merging, and optimizing documents with real-time progress tracking.',
+            color: 'red',
+            icon: 'fas fa-file-pdf',
+            tools: [
+                { name: 'PDF → Word Converter', desc: 'Convert PDFs into editable Word documents (.docx)', time: '10s', tool_id: 'pdf_word_converter' },
+                { name: 'PDF → Excel Converter', desc: 'Extract tables from PDF to structured Excel', time: '15s', tool_id: 'pdf_excel_converter' },
+                { name: 'Word → PDF Converter', desc: 'Convert Word files to PDF format', time: '8s', tool_id: 'word_pdf_converter' },
+                { name: 'Excel → PDF Converter', desc: 'Convert Excel sheets into formatted PDF', time: '8s', tool_id: 'excel_pdf_converter' },
+                { name: 'PDF Merger', desc: 'Combine multiple PDFs into one', time: '5s', tool_id: 'pdf_merger' },
+                { name: 'PDF Splitter', desc: 'Split PDF into single pages or ranges', time: '3s', tool_id: 'pdf_splitter' },
+                { name: 'PDF Editor', desc: 'Add/remove text, images, pages; annotate PDF', time: '20s', tool_id: 'pdf_editor' },
+                { name: 'PDF Compressor', desc: 'Reduce PDF size without quality loss', time: '12s', tool_id: 'pdf_compressor' },
+                { name: 'PDF OCR', desc: 'Convert scanned PDFs/images to searchable text', time: '25s', tool_id: 'pdf_ocr' },
+                { name: 'PDF Form Filler', desc: 'Fill PDF forms in bulk from CSV/Excel', time: '15s', tool_id: 'pdf_form_filler' },
+                { name: 'PDF → Image Converter', desc: 'Convert each PDF page into image files', time: '8s', tool_id: 'pdf_image_converter' },
+                { name: 'Image → PDF Converter', desc: 'Combine multiple images into a single PDF', time: '6s', tool_id: 'image_pdf_converter' },
+                { name: 'PDF Watermark Tool', desc: 'Add watermark (text/image) to multiple PDFs', time: '7s', tool_id: 'pdf_watermark' },
+                { name: 'PDF Password Tool', desc: 'Encrypt or decrypt PDF files', time: '3s', tool_id: 'pdf_password' },
+                { name: 'PDF Metadata Editor', desc: 'View & modify PDF metadata', time: '2s', tool_id: 'pdf_metadata_editor' },
+                { name: 'Table Extractor', desc: 'Extract tables from PDFs to Excel/CSV', time: '15s', tool_id: 'table_extractor' },
+                { name: 'PDF Summary Generator', desc: 'Generate key points from PDF content', time: '20s', tool_id: 'pdf_summary_generator' },
+                { name: 'PDF Annotation Tool', desc: 'Highlight, comment, and draw on PDFs', time: '10s', tool_id: 'pdf_annotation' },
+                { name: 'PDF Page Reorder Tool', desc: 'Rearrange PDF pages', time: '4s', tool_id: 'pdf_page_reorder' },
+                { name: 'PDF Template Generator', desc: 'Create reusable PDF templates', time: '12s', tool_id: 'pdf_template_generator' }
+            ]
+        },
+        excel: {
+            title: 'Excel & CSV Tools',
+            description: 'Powerful spreadsheet processing tools for data cleaning, conversion, analysis, and visualization.',
+            color: 'green',
+            icon: 'fas fa-table',
+            tools: [
+                { name: 'Excel → CSV Converter', desc: 'Convert Excel files to CSV', time: '3s', tool_id: 'excel_csv_converter' },
+                { name: 'CSV → Excel Converter', desc: 'Convert CSV to Excel', time: '3s', tool_id: 'csv_excel_converter' },
+                { name: 'Excel Deduplicator', desc: 'Remove duplicate rows/columns', time: '8s', tool_id: 'excel_deduplicator' },
+                { name: 'Excel Cleaner', desc: 'Remove empty cells, standardize formatting', time: '6s', tool_id: 'excel_cleaner' },
+                { name: 'CSV Validator', desc: 'Check for errors in CSV files', time: '5s', tool_id: 'csv_validator' },
+                { name: 'Bulk CSV → SQL Generator', desc: 'Convert CSV to SQL insert statements', time: '7s', tool_id: 'bulk_csv_sql' },
+                { name: 'CSV ↔ JSON Converter', desc: 'Convert CSV to JSON or JSON to CSV', time: '4s', tool_id: 'csv_json_converter' },
+                { name: 'Excel/CSV Merger', desc: 'Combine multiple Excel or CSV files', time: '6s', tool_id: 'excel_merger' },
+                { name: 'Excel Pivot Table Generator', desc: 'Generate pivot tables from raw data', time: '10s', tool_id: 'excel_pivot_generator' },
+                { name: 'Excel Chart Generator', desc: 'Create charts from Excel/CSV data', time: '8s', tool_id: 'excel_chart_generator' }
+            ]
+        },
+        image: {
+            title: 'Image & Media Tools',
+            description: 'Comprehensive image processing tools for resizing, compression, editing, and enhancement.',
+            color: 'purple',
+            icon: 'fas fa-image',
+            tools: [
+                { name: 'Bulk Image Resizer', desc: 'Resize multiple images to specified dimensions', time: '12s', tool_id: 'bulk_image_resizer' },
+                { name: 'Image Compressor', desc: 'Reduce image file size without quality loss', time: '8s', tool_id: 'image_compressor' },
+                { name: 'Image Background Remover', desc: 'Automatically remove image backgrounds', time: '15s', tool_id: 'image_background_remover' },
+                { name: 'Meme Generator', desc: 'Add text to images to create memes', time: '5s', tool_id: 'meme_generator' },
+                { name: 'Bulk Watermark Tool', desc: 'Add logos or text to multiple images', time: '10s', tool_id: 'bulk_watermark' },
+                { name: 'Social Media Thumbnail Generator', desc: 'Generate ready-to-post social media thumbnails', time: '6s', tool_id: 'social_thumbnail_generator' },
+                { name: 'Image Format Converter', desc: 'Convert images between JPG, PNG, WebP', time: '6s', tool_id: 'image_format_converter' },
+                { name: 'Photo Collage Maker', desc: 'Merge multiple images into a single collage', time: '12s', tool_id: 'photo_collage_maker' },
+                { name: 'Color Palette Extractor', desc: 'Extract dominant colors from images', time: '3s', tool_id: 'color_palette_extractor' },
+                { name: 'AI Image Enhancer', desc: 'Enhance image quality using AI', time: '25s', tool_id: 'ai_image_enhancer' },
+                { name: 'AI Image Caption Generator', desc: 'Generate descriptive captions for images', time: '15s', tool_id: 'ai_image_caption' },
+                { name: 'Image OCR → Text', desc: 'Extract text from images', time: '12s', tool_id: 'image_ocr_text' },
+                { name: 'Animated GIF Maker', desc: 'Create GIFs from multiple images', time: '10s', tool_id: 'animated_gif_maker' },
+                { name: 'Video → GIF Converter', desc: 'Convert short video clips to GIFs', time: '18s', tool_id: 'video_gif_converter' },
+                { name: 'Meme Template Generator', desc: 'Predefined meme templates for easy creation', time: '6s', tool_id: 'meme_template_generator' }
+            ]
+        },
+        url: {
+            title: 'Website & URL Tools',
+            description: 'Website analysis and URL processing tools for SEO, performance, and content extraction.',
+            color: 'blue',
+            icon: 'fas fa-globe',
+            tools: [
+                { name: 'URL Summarizer', desc: 'Summarize website content using AI', time: '15s', tool_id: 'url_summarizer' },
+                { name: 'Keyword Scraper', desc: 'Extract top keywords from any page', time: '8s', tool_id: 'keyword_scraper' },
+                { name: 'Meta Tag Extractor', desc: 'Extract meta title, description, keywords', time: '5s', tool_id: 'meta_tag_extractor' },
+                { name: 'Broken Link Checker', desc: 'Scan website for dead links', time: '12s', tool_id: 'broken_link_checker' },
+                { name: 'Sitemap Generator', desc: 'Generate XML sitemap from website', time: '10s', tool_id: 'sitemap_generator' },
+                { name: 'Page Speed Analyzer', desc: 'Website performance report', time: '15s', tool_id: 'page_speed_analyzer' },
+                { name: 'Internal Link Visualizer', desc: 'Map internal links of a website', time: '12s', tool_id: 'internal_link_visualizer' },
+                { name: 'Social Media Share Preview', desc: 'Preview how link appears on social media', time: '6s', tool_id: 'social_share_preview' },
+                { name: 'HTML → PDF Generator', desc: 'Convert webpage HTML to PDF', time: '8s', tool_id: 'html_pdf_generator' },
+                { name: 'Bulk Screenshot Generator', desc: 'Capture screenshots of multiple URLs', time: '15s', tool_id: 'bulk_screenshot_generator' },
+                { name: 'Robots.txt Validator', desc: 'Check robots.txt rules for URL accessibility', time: '4s', tool_id: 'robots_validator' },
+                { name: 'Redirect Checker', desc: 'Track URL redirects', time: '6s', tool_id: 'redirect_checker' },
+                { name: 'Competitor Content Analyzer', desc: 'Extract SEO insights from competitor sites', time: '15s', tool_id: 'competitor_analyzer' },
+                { name: 'Website Text Extractor', desc: 'Extract all visible text from webpage', time: '5s', tool_id: 'website_text_extractor' },
+                { name: 'Web Archive Generator', desc: 'Capture website as PDF/HTML snapshot', time: '10s', tool_id: 'web_archive_generator' }
+            ]
+        },
+        seo: {
+            title: 'SEO & Marketing Tools',
+            description: 'Search engine optimization and digital marketing tools for keyword research, analysis, and automation.',
+            color: 'orange',
+            icon: 'fas fa-chart-line',
+            tools: [
+                { name: 'Keyword Suggestion Tool', desc: 'Generate relevant keywords with search volume', time: '8s', tool_id: 'keyword_suggestion' },
+                { name: 'Backlink Analyzer', desc: 'Analyze backlinks of a website/domain', time: '15s', tool_id: 'backlink_analyzer' },
+                { name: 'Competitor Keyword Gap Analysis', desc: 'Compare keywords between two domains', time: '18s', tool_id: 'keyword_gap_analysis' },
+                { name: 'SEO Audit Report Generator', desc: 'Generate full SEO audit for a website', time: '20s', tool_id: 'seo_audit_generator' },
+                { name: 'Meta Description Generator', desc: 'Auto-generate SEO-optimized meta descriptions', time: '6s', tool_id: 'meta_description_generator' },
+                { name: 'Hashtag Generator', desc: 'Generate trending hashtags for social posts', time: '5s', tool_id: 'hashtag_generator' },
+                { name: 'Social Media Post Scheduler', desc: 'Schedule posts to multiple platforms', time: '3s', tool_id: 'social_post_scheduler' },
+                { name: 'Email List Extractor', desc: 'Extract emails from URL or uploaded file', time: '10s', tool_id: 'email_list_extractor' },
+                { name: 'Email Validator', desc: 'Validate email list for deliverability', time: '12s', tool_id: 'email_validator' },
+                { name: 'Bulk URL Meta Tag Analyzer', desc: 'Analyze meta tags for multiple URLs', time: '15s', tool_id: 'bulk_meta_analyzer' }
+            ]
+        },
+        ai: {
+            title: 'AI & Automation Tools',
+            description: 'AI-powered tools for content generation, translation, analysis, and intelligent automation.',
+            color: 'pink',
+            icon: 'fas fa-robot',
+            tools: [
+                { name: 'AI Content Summarizer', desc: 'Summarize PDF, Word, or website content', time: '15s', tool_id: 'ai_content_summarizer' },
+                { name: 'AI Content Rewriter', desc: 'Paraphrase text content intelligently', time: '12s', tool_id: 'ai_content_rewriter' },
+                { name: 'AI FAQ Generator', desc: 'Generate FAQs from website or document', time: '18s', tool_id: 'ai_faq_generator' },
+                { name: 'AI Product Description Generator', desc: 'Generate product descriptions from CSV/website', time: '20s', tool_id: 'ai_product_description' },
+                { name: 'AI Email Subject Line Generator', desc: 'Suggest engaging subject lines', time: '8s', tool_id: 'ai_email_subject' },
+                { name: 'AI Social Media Post Optimizer', desc: 'Improve social post content for engagement', time: '10s', tool_id: 'ai_social_optimizer' },
+                { name: 'AI Sentiment Analyzer', desc: 'Analyze sentiment of reviews/texts', time: '12s', tool_id: 'ai_sentiment_analyzer' },
+                { name: 'AI Competitor Report Generator', desc: 'Generate insights on competitor websites', time: '25s', tool_id: 'ai_competitor_report' },
+                { name: 'AI Table Extractor', desc: 'Extract tables from PDF/images into Excel', time: '20s', tool_id: 'ai_table_extractor' },
+                { name: 'AI Text Translator', desc: 'Translate text/files to multiple languages', time: '15s', tool_id: 'ai_text_translator' }
+            ]
+        },
+        dev: {
+            title: 'Developer & Code Tools',
+            description: 'Development tools for code optimization, API testing, format conversion, and web development.',
+            color: 'indigo',
+            icon: 'fas fa-code',
+            tools: [
+                { name: 'HTML → PDF Converter', desc: 'Convert HTML files or webpages into PDF', time: '8s', tool_id: 'html_pdf_converter' },
+                { name: 'Markdown → HTML/PDF', desc: 'Convert Markdown to HTML or PDF', time: '6s', tool_id: 'markdown_converter' },
+                { name: 'CSS/JS Minifier & Optimizer', desc: 'Minify and optimize CSS/JS files', time: '4s', tool_id: 'css_js_minifier' },
+                { name: 'JSON → CSV/Excel', desc: 'Convert JSON files to Excel/CSV', time: '5s', tool_id: 'json_converter' },
+                { name: 'Bulk API Response Tester', desc: 'Test multiple API endpoints and record response', time: '12s', tool_id: 'api_tester' },
+                { name: 'URL Parameter Cleaner', desc: 'Clean URLs by removing tracking parameters', time: '3s', tool_id: 'url_cleaner' },
+                { name: 'Website Content Downloader', desc: 'Download all visible text/images from website', time: '15s', tool_id: 'website_downloader' },
+                { name: 'Bulk URL Response Checker', desc: 'Check HTTP response codes of multiple URLs', time: '10s', tool_id: 'url_response_checker' },
+                { name: 'Structured Data Generator', desc: 'Generate JSON-LD structured data', time: '5s', tool_id: 'structured_data_generator' },
+                { name: 'Multi-Page Screenshot → PDF', desc: 'Capture screenshots and merge into PDF', time: '20s', tool_id: 'multi_screenshot_pdf' }
+            ]
+        },
+        productivity: {
+            title: 'Productivity & Miscellaneous Tools',
+            description: 'Utility tools for file management, document generation, and everyday productivity tasks.',
+            color: 'teal',
+            icon: 'fas fa-tools',
+            tools: [
+                { name: 'Bulk Document Renamer', desc: 'Rename multiple documents with a pattern', time: '3s', tool_id: 'bulk_renamer' },
+                { name: 'File Format Converter', desc: 'Convert between DOCX ↔ ODT, XLSX ↔ ODS', time: '8s', tool_id: 'file_format_converter' },
+                { name: 'Digital Signature Generator', desc: 'Create reusable digital signature stamps', time: '4s', tool_id: 'signature_generator' },
+                { name: 'Certificate Generator', desc: 'Bulk generate certificates from names list', time: '10s', tool_id: 'certificate_generator' },
+                { name: 'Badge Generator', desc: 'Generate badges for events/teams', time: '8s', tool_id: 'badge_generator' },
+                { name: 'Calendar Generator', desc: 'Generate printable monthly/annual calendars', time: '6s', tool_id: 'calendar_generator' },
+                { name: 'QR Code Generator', desc: 'Create QR codes for URL, text, or contact info', time: '2s', tool_id: 'qr_generator' },
+                { name: 'Random Password Generator', desc: 'Generate secure random passwords', time: '1s', tool_id: 'password_generator' },
+                { name: 'ASCII Art Generator', desc: 'Convert text/images into ASCII art', time: '5s', tool_id: 'ascii_generator' },
+                { name: 'Template Generator', desc: 'Generate templates for invoices, proposals', time: '12s', tool_id: 'template_generator' },
+                { name: 'Markdown Resume Builder', desc: 'Create resumes from Markdown input', time: '8s', tool_id: 'resume_builder' },
+                { name: 'Email Template Generator', desc: 'Create reusable HTML email templates', time: '6s', tool_id: 'email_template_generator' },
+                { name: 'Bulk Text Replacer', desc: 'Search & replace text in multiple files', time: '7s', tool_id: 'bulk_text_replacer' },
+                { name: 'File Metadata Editor', desc: 'View & edit metadata of various files', time: '4s', tool_id: 'metadata_editor' },
+                { name: 'File Version Tracker', desc: 'Track changes/versions of uploaded files', time: '6s', tool_id: 'version_tracker' }
+            ]
+        }
+    };
+
+    const data = toolsData[category];
+    if (!data) return;
+
+    document.getElementById('categoryTitle').textContent = data.title;
+    document.getElementById('categoryDescription').textContent = data.description;
+
+    const toolsGrid = document.getElementById('toolsGrid');
+    toolsGrid.innerHTML = '';
+
+    data.tools.forEach(tool => {
+        const toolCard = document.createElement('div');
+        toolCard.className = 'group bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-' + data.color + '-200';
+        
+        toolCard.innerHTML = `
+            <div class="flex items-start justify-between mb-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-${data.color}-500 to-${data.color}-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                    <i class="${data.icon} text-white"></i>
+                </div>
+                <span class="text-xs bg-${data.color}-50 text-${data.color}-600 px-2 py-1 rounded-full font-medium">${tool.time}</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-${data.color}-600 transition-colors">${tool.name}</h3>
+            <p class="text-gray-600 text-sm mb-4 leading-relaxed">${tool.desc}</p>
+            <button onclick="openTool('${tool.tool_id}', '${tool.name}')" class="w-full bg-gradient-to-r from-${data.color}-500 to-${data.color}-600 text-white py-2 px-4 rounded-lg hover:from-${data.color}-600 hover:to-${data.color}-700 transition-all duration-200 font-medium text-sm">
+                Use Tool <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        `;
+        
+        toolsGrid.appendChild(toolCard);
+    });
+}
+
+function openTool(toolId, toolName) {
+    window.location.href = `/tool/${toolId}?name=${encodeURIComponent(toolName)}`;
+}
+</script>
+{% endblock %}
